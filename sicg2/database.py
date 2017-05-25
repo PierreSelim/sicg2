@@ -38,7 +38,6 @@ class SicgDB(object):
             SicgDB.__INSTANCE__ = cls(db_file)
         return SicgDB.__INSTANCE__
 
-
     def insert(self, page_title='', views=None, url=None, date=None):
         query = QUERIES['insert'].format(table=SicgDB.TABLE)
         last_update = date or datetime.datetime.now()

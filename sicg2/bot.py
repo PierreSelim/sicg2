@@ -23,6 +23,7 @@ def pageview90(lang, title):
                                        access='all-access',
                                        agent='all-agents')
 
+
 def isthereanimage(page):
     """Returns whether there is an image in the article or not."""
     imagepattern = ["<gallery>", "File:", "Image:", ".jpg", ".JPG", ".gif",
@@ -83,7 +84,6 @@ def main():
         'lang': args.lang
     }
     bot(**kwargs)
-
 
 
 if __name__ == '__main__':
