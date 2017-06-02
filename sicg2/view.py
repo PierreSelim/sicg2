@@ -9,7 +9,12 @@ app = Flask(__name__)
 
 
 def articles(limit=1000):
-    return db.list(limit=limit).decode('utf-8')
+    last_update = db.lastupdate()
+    articles_list = db.list(limit=limit)
+    mdown = "Last update: {update}\n\n{articles}".format(
+        update=last_update,
+        articles=articles_list)
+    return mdown.decode('utf-8')
 
 
 @app.route('/')

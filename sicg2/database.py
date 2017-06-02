@@ -9,7 +9,8 @@ QUERIES = {
     'insert': """INSERT INTO {table}
               VALUES (:page_title, :views, :url, :date)""",
     'list': """SELECT * FROM {table}
-            ORDER BY views DESC{limit};"""
+            ORDER BY views DESC{limit};""",
+    'lastupdate': 'SELECT date FROM {table} ORDER BY date DESC LIMIT 1'
 }
 
 
@@ -65,3 +66,8 @@ class SicgDB(object):
                 url=article[2]
             ))
         return '\n'.join(markdown)
+
+    def lastupdate(self):
+        query = QUERIES['lastupdate'].format(table=SicgDB.TABLE)
+        self.cursor.execute(query)
+        return self.cursor.fetchone()
