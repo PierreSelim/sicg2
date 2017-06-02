@@ -8,8 +8,8 @@ db = SicgDB.get()
 app = Flask(__name__)
 
 
-def articles(limit=1000):
-    last_update = db.lastupdate()
+def articles(limit=1000, datefmt='%Y-%m-%d %H:%M:%S'):
+    last_update = db.lastupdate().strftime(datefmt)
     articles_list = db.list(limit=limit)
     mdown = "Last update: {update}\n\n{articles}".format(
         update=last_update,

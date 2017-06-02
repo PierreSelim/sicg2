@@ -36,6 +36,9 @@ class SicgDB(object):
             db_file = os.environ.get('SICG2_DB', None)
             if not db_file:
                 raise ValueError('Need to set SICG2_DB environment variable')
+            if not os.path.exists(db_file):
+                msg = 'SICG2_DB points to an unexisting file: %s' % db_file
+                raise ValueError(msg)
             SicgDB.__INSTANCE__ = cls(db_file)
         return SicgDB.__INSTANCE__
 
@@ -70,4 +73,8 @@ class SicgDB(object):
     def lastupdate(self):
         query = QUERIES['lastupdate'].format(table=SicgDB.TABLE)
         self.cursor.execute(query)
-        return self.cursor.fetchone()
+        result = self.cursor.fetchone()
+        if result:
+            result = datetime.datetime \
+                             .strptime(result[0], '%Y-%m-%d %H:%M:%S.%f')
+        return result
