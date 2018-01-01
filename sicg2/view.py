@@ -1,3 +1,5 @@
+"""HTTP server to view the content of the database."""
+
 import markdown
 from flask import Flask, render_template, Markup
 

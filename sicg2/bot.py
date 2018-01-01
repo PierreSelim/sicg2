@@ -1,3 +1,5 @@
+"""Bot module who updates the database."""
+
 from argparse import ArgumentParser
 import time
 
@@ -16,6 +18,7 @@ LOG = logger()
 
 
 def pageview90(lang, title):
+    """Pageviews over the last 90 days on given language of Wikipedia"""
     project = '{lang}.wikipedia'.format(lang=lang)
     return pageviewapi.period.sum_last(project,
                                        title.encode('utf-8'),
@@ -34,6 +37,7 @@ def isthereanimage(page):
 
 
 def bot(lang='fr'):
+    """Bot main loop."""
     start_time = time.time()
     LOG.info('sicg2 v%s started', __version__)
     site = pywikibot.Site(lang, 'wikipedia')
@@ -70,6 +74,7 @@ def bot(lang='fr'):
 
 
 def main():
+    """main."""
     description = 'Analyzing Wikipedia to surface image content gap.'
     parser = ArgumentParser(description=description)
     parser.add_argument('-w', '--wikipedia',

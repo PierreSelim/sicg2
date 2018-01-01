@@ -1,3 +1,5 @@
+"""Database module for SICG."""
+
 import datetime
 import os
 import sqlite3
@@ -16,15 +18,28 @@ QUERIES = {
 
 class SicgDB(object):
 
+    """Interface with database.
+
+    Used as singleton with SicgDB.get()
+    """
+
     TABLE = 'articles_views'
     __INSTANCE__ = None
 
     def __init__(self, filename):
+        """Contructor.
+
+        Create a new database if not already existing in the sqlite file.
+
+        Args:
+            filename (str): filename of the sqlite database file.
+        """
         self.connection = sqlite3.connect(filename, check_same_thread=False)
         self.cursor = self.connection.cursor()
         self.__create_db__()
 
     def __create_db__(self):
+        """Create a new database if not already existing in the sqlite file."""
         self.cursor.execute('PRAGMA encoding="UTF-8";')
         query = QUERIES['createdb'].format(table=SicgDB.TABLE)
         self.cursor.execute(query)
@@ -32,6 +47,7 @@ class SicgDB(object):
 
     @classmethod
     def get(cls):
+        """SicgDB singleton."""
         if not SicgDB.__INSTANCE__:
             db_file = os.environ.get('SICG2_DB', None)
             if not db_file:
@@ -43,6 +59,7 @@ class SicgDB(object):
         return SicgDB.__INSTANCE__
 
     def insert(self, page_title='', views=None, url=None, date=None):
+        """Insert a page in the database."""
         query = QUERIES['insert'].format(table=SicgDB.TABLE)
         last_update = date or datetime.datetime.now()
         self.cursor.execute(query, {
@@ -54,6 +71,7 @@ class SicgDB(object):
         self.connection.commit()
 
     def list(self, limit=None):
+        """List pages in database ordered by views (with a possible limit)."""
         limit_query = ''
         if limit >= 0:
             limit_query = ' LIMIT %d' % limit
@@ -71,6 +89,7 @@ class SicgDB(object):
         return '\n'.join(markdown)
 
     def lastupdate(self):
+        """Most recent date of update in the database."""
         query = QUERIES['lastupdate'].format(table=SicgDB.TABLE)
         self.cursor.execute(query)
         result = self.cursor.fetchone()
