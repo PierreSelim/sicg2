@@ -42,13 +42,13 @@ def bot(lang='fr'):
     LOG.info('sicg2 v%s started', __version__)
     site = pywikibot.Site(lang, 'wikipedia')
     random_generator = RandomPageGenerator(site=site, namespaces=0)
+    LOG.info('Generator: %s', random_generator)
     pages = []
     zerodata = []
     db = SicgDB.get()
     try:
         # Scan of random pages
-        while True:
-            page = random_generator.next()
+        for page in random_generator:
             pages.append(page)
             try:
                 views = pageview90(lang, page.title())
