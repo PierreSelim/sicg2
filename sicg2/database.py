@@ -3,8 +3,9 @@
 import datetime
 import os
 import sqlite3
+import sys
 
-
+PY3 = sys.version_info >= (3, )
 QUERIES = {
     'createdb': """CREATE TABLE
                 IF NOT EXISTS {table} (page_title, views, url, date)""",
@@ -81,8 +82,11 @@ class SicgDB(object):
         all = self.cursor.fetchall()
         markdown = []
         for article in all:
+            article_title = article[0]
+            if not PY3:
+                article_title = article[0].encode('utf-8')
             markdown.append('* [{title}]({url}) ({views})'.format(
-                title=article[0].encode('utf-8'),
+                title=article_title,
                 views=article[1],
                 url=article[2]
             ))

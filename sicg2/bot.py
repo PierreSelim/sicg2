@@ -1,6 +1,7 @@
 """Bot module who updates the database."""
 
 from argparse import ArgumentParser
+import sys
 import time
 
 import pywikibot
@@ -15,13 +16,17 @@ from database import SicgDB
 
 
 LOG = logger()
+PY3 = sys.version_info >= (3, )
 
 
 def pageview90(lang, title):
     """Pageviews over the last 90 days on given language of Wikipedia"""
     project = '{lang}.wikipedia'.format(lang=lang)
+    page_title = title
+    if not PY3:
+        page_title = title.encode('utf-8')
     return pageviewapi.period.sum_last(project,
-                                       title.encode('utf-8'),
+                                       page_title,
                                        last=90,
                                        access='all-access',
                                        agent='all-agents')

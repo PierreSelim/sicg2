@@ -1,9 +1,15 @@
 """HTTP server to view the content of the database."""
 
+
+import sys
+
 import markdown
 from flask import Flask, render_template, Markup
 
 from database import SicgDB
+
+
+PY3 = sys.version_info >= (3, )
 
 
 db = SicgDB.get()
@@ -16,7 +22,10 @@ def articles(limit=1000, datefmt='%Y-%m-%d %H:%M:%S'):
     mdown = "Last update: {update}\n\n{articles}".format(
         update=last_update,
         articles=articles_list)
-    return mdown.decode('utf-8')
+    result = mdown
+    if not PY3:
+        result = mdown.decode('utf-8')
+    return result
 
 
 @app.route('/')
