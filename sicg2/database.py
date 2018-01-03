@@ -54,8 +54,7 @@ class SicgDB(object):
             if not db_file:
                 raise ValueError('Need to set SICG2_DB environment variable')
             if not os.path.exists(db_file):
-                msg = 'SICG2_DB points to an unexisting file: %s' % db_file
-                raise ValueError(msg)
+                open(db_file, mode='a').close()
             SicgDB.__INSTANCE__ = cls(db_file)
         return SicgDB.__INSTANCE__
 
